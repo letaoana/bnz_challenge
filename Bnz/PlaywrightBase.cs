@@ -26,7 +26,7 @@ namespace Bnz.UI.Tests
         }
 
         [OneTimeSetUp]
-        public static void CreateiPlaywrightAndiBrowserContextInstances()
+        public static void CreatePlaywrightAndBrowserContextInstances()
         {
             var config = new ConfigurationBuilder().SetBasePath(AppDomain.CurrentDomain.BaseDirectory).AddJsonFile("appsettings.json").Build();
             var section = config.GetSection(nameof(BrowserSettings));
@@ -46,7 +46,7 @@ namespace Bnz.UI.Tests
         }
 
         [TearDown]
-        public async Task DisposeiPageContextAndiBrowserContextInstances()
+        public async Task DisposePageContextAndBrowserContextInstances()
         {
             var testResult = TestContext.CurrentContext.Result.Outcome;
 
@@ -61,7 +61,7 @@ namespace Bnz.UI.Tests
         }
 
         [OneTimeTearDown]
-        public void DisposeiBrowserContextAndiPlaywrightContextInstances()
+        public static void DisposeBrowserContextAndPlaywrightContextInstances()
         {
             Playwright?.Dispose();
         }

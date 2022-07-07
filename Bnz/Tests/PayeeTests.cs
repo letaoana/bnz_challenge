@@ -13,7 +13,7 @@ namespace Bnz.UI.Tests.Tests
     public class PayeeTests : PlaywrightBase
     {
         private PayeesPageObject payeesPageObject;
-        private readonly string pageUrl = "https://www.demo.bnz.co.nz/client/payees";
+        private const string PayeesPageUrl = "https://www.demo.bnz.co.nz/client/payees";
 
         public PayeeTests(TargetedBrowser targetedBrowser) : base(TargetedBrowser)
         {
@@ -31,13 +31,13 @@ namespace Bnz.UI.Tests.Tests
             payeesPageObject = new PayeesPageObject(Page);
             var isPageHeaderVisible = await payeesPageObject.IsPageHeaderVisible();
             isPageHeaderVisible.ShouldBeTrue();
-            Page.Url.ShouldBe(pageUrl);
+            Page.Url.ShouldBe(PayeesPageUrl);
         }
 
         [Test]
         public async Task VerifyCanAddNewPayee()
         {
-            await Page.GotoAsync(pageUrl);
+            await Page.GotoAsync(PayeesPageUrl);
             payeesPageObject = new PayeesPageObject(Page);
             await payeesPageObject.CreatePayee("M", "10", "1010", "1010101", "01");
 
@@ -50,14 +50,13 @@ namespace Bnz.UI.Tests.Tests
         [Test]
         public async Task VerifyPayeeNameIsARequiredField()
         {
-            await Page.GotoAsync(pageUrl);
+            await Page.GotoAsync(PayeesPageUrl);
             payeesPageObject = new PayeesPageObject(Page);
             await payeesPageObject.ClickAddButton();
             await payeesPageObject.ClickAddButtonOnNewPayeeForm();
             var fieldError = await payeesPageObject.GetFieldError();
             fieldError.ShouldStartWith("Payee Name is a required field.");
-            var payeeName = "L";
-            await payeesPageObject.SetPayeeName(payeeName);
+            await payeesPageObject.SetPayeeName("L");
             fieldError = await payeesPageObject.GetFieldError();
             fieldError.ShouldBeNull();
         }
@@ -65,7 +64,7 @@ namespace Bnz.UI.Tests.Tests
         [Test]
         public async Task VerifyThatPayeesCanBeSortedByName()
         {
-            await Page.GotoAsync(pageUrl);
+            await Page.GotoAsync(PayeesPageUrl);
             payeesPageObject = new PayeesPageObject(Page);
 
             var payeeList = payeesPageObject.GetPayeeList().AllTextContentsAsync().Result;
