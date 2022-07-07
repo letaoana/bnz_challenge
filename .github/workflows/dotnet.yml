@@ -25,6 +25,7 @@ jobs:
       run: | 
           npx playwright install-deps
           npx playwright install
+          xvfb-run ~/projects/Bnz/bin/debug/test1.dll
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
