@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -34,4 +34,4 @@ jobs:
     - name: Run API Tests        
       run: dotnet test Bnz.API.Tests --verbosity normal --logger "nunit;LogFileName=TestResults.xml"
     - name: Run UI Tests
-      run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- bash -c "npm run test" --headed
+      run: dotnet test Bnz.UI.Tests --verbosity normal --logger "nunit;LogFileName=TestResults.xml"
