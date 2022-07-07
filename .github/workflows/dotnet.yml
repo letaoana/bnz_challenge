@@ -24,11 +24,11 @@ jobs:
     - name: Install dependencies
       run: | 
           npx playwright install-deps
-          npx playwright install
-          xvfb-run ~/projects/Bnz/bin/debug/Bnz.UI.Tests.dll
+          npx playwright install          
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
     - name: Test
+        xvfb-run ~/projects/Bnz/bin/debug/Bnz.UI.Tests.dll
       run: dotnet test --verbosity normal --logger "nunit;LogFileName=TestResults.xml"
