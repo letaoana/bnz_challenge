@@ -19,8 +19,7 @@ jobs:
         dotnet-version: 3.1.x
     - uses: microsoft/playwright-github-action@v1
     - name: Install dependencies and run tests
-    - run: sudo apt-get install xvfb
-    - run: xvfb-run --auto-servernum npm test
+      run: xvfb-run --auto-servernum npm test
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
