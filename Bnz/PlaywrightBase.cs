@@ -11,19 +11,18 @@ namespace Bnz.UI.Tests
     [TestFixture]
     public abstract class PlaywrightBase
     {
-        protected static IPlaywright playwright;
-        protected static IBrowser browser;
-        protected static TargetedBrowser _targetedBrowser;
+        protected static IPlaywright Playwright;
+        protected static IBrowser Browser;
+        protected static TargetedBrowser TargetedBrowser;
 
-        protected IPage page;
-        protected IBrowserContext context;
-        private static string CurrentTestFolder = TestContext.CurrentContext.TestDirectory;
-        private static DirectoryInfo LogsFolder;
-        private static DirectoryInfo ScreenshotsFolder;
+        protected IPage Page;
+        protected IBrowserContext Context;
+        private static string _currentTestFolder = TestContext.CurrentContext.TestDirectory;
+        private static DirectoryInfo _screenshotsFolder;
 
-        public PlaywrightBase(TargetedBrowser targetedBrowser)
+        protected PlaywrightBase(TargetedBrowser targetedBrowser)
         {
-            _targetedBrowser = targetedBrowser;
+            TargetedBrowser = targetedBrowser;
         }
 
         [OneTimeSetUp]
@@ -32,18 +31,18 @@ namespace Bnz.UI.Tests
             var config = new ConfigurationBuilder().SetBasePath(AppDomain.CurrentDomain.BaseDirectory).AddJsonFile("appsettings.json").Build();
             var section = config.GetSection(nameof(BrowserSettings));
             var playwrightConfig = section.Get<BrowserSettings>();
-            CurrentTestFolder = string.IsNullOrEmpty(playwrightConfig.LogFolderPath) ? CurrentTestFolder : playwrightConfig.LogFolderPath;
-            LogsFolder = Directory.CreateDirectory(Path.Combine(CurrentTestFolder, "Logs"));
-            ScreenshotsFolder = Directory.CreateDirectory(Path.Combine(CurrentTestFolder, "Screenshots"));
-            browser = Task.Run(() => GetBrowserAsync(_targetedBrowser)).Result;
+            _currentTestFolder = string.IsNullOrEmpty(playwrightConfig.LogFolderPath) ? _currentTestFolder : playwrightConfig.LogFolderPath;
+            Directory.CreateDirectory(Path.Combine(_currentTestFolder, "Logs"));
+            _screenshotsFolder = Directory.CreateDirectory(Path.Combine(_currentTestFolder, "Screenshots"));
+            Browser = Task.Run(() => GetBrowserAsync(TargetedBrowser)).Result;
         }
 
         [SetUp]
         public async Task CreateBrowserContextAndPageContextInstances()
         {
-            context = await browser.NewContextAsync();
-            page = await context.NewPageAsync();
-            await page.SetViewportSizeAsync(1920, 1080);
+            Context = await Browser.NewContextAsync();
+            Page = await Context.NewPageAsync();
+            await Page.SetViewportSizeAsync(1920, 1080);
         }
 
         [TearDown]
@@ -51,40 +50,40 @@ namespace Bnz.UI.Tests
         {
             var testResult = TestContext.CurrentContext.Result.Outcome;
 
-            if (testResult.Status.Equals(TestStatus.Failed) || testResult.Status.Equals(ResultState.Error))
+            if (testResult.Status.Equals(TestStatus.Failed))
             {
-                var testSpecificScreenshotFolder = Directory.CreateDirectory(Path.Combine(ScreenshotsFolder.FullName, TestContext.CurrentContext.Test.Name));
+                var testSpecificScreenshotFolder = Directory.CreateDirectory(Path.Combine(_screenshotsFolder.FullName, TestContext.CurrentContext.Test.Name));
                 var screenshotPath = Path.Combine(testSpecificScreenshotFolder.FullName, $"TestFailure_{DateTime.Now:yyyyMMddHHmmss}.png");
-                await page.ScreenshotAsync(new PageScreenshotOptions { Path = screenshotPath });
+                await Page.ScreenshotAsync(new PageScreenshotOptions { Path = screenshotPath });
             }
 
-            await context.CloseAsync();
+            await Context.CloseAsync();
         }
 
         [OneTimeTearDown]
         public void DisposeiBrowserContextAndiPlaywrightContextInstances()
         {
-            playwright?.Dispose();
+            Playwright?.Dispose();
         }
 
         private static async Task<IBrowser> GetBrowserAsync(TargetedBrowser targetedBrowser)
         {
-            playwright = await Playwright.CreateAsync();
-            IBrowser browser = targetedBrowser switch
+            Playwright = await Microsoft.Playwright.Playwright.CreateAsync();
+            var browser = targetedBrowser switch
             {
-                TargetedBrowser.Chrome => await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+                TargetedBrowser.Chrome => await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
                 {
                     Channel = "chrome",
                     Headless = false,
                     SlowMo = 2000
                 }),
-                TargetedBrowser.Firefox => await playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions
+                TargetedBrowser.Firefox => await Playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions
                 {
                     Channel = "firefox",
                     Headless = false,
                     SlowMo = 2000
                 }),
-                TargetedBrowser.Safari => await playwright.Webkit.LaunchAsync(new BrowserTypeLaunchOptions
+                TargetedBrowser.Safari => await Playwright.Webkit.LaunchAsync(new BrowserTypeLaunchOptions
                 {
                     Channel = "safari",
                     Headless = false,

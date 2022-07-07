@@ -16,24 +16,24 @@ namespace Bnz.UI.Tests.Tests
         private const string EverydayAccount = "Everyday";
         private const string BillsAccount = "Bills";
 
-        public PaymentsTests(TargetedBrowser targetedBrowser) : base(_targetedBrowser)
+        public PaymentsTests(TargetedBrowser targetedBrowser) : base(TargetedBrowser)
         {
-            _targetedBrowser = targetedBrowser;
+            TargetedBrowser = targetedBrowser;
         }
 
         [Test]
         public async Task VerifyCurrentBalanceOfEverydayAccountAndBillsAccountAreCorrect()
         {
-            await page.GotoAsync("https://www.demo.bnz.co.nz/client");
+            await Page.GotoAsync("https://www.demo.bnz.co.nz/client");
 
-            var paymentsPageObject = new PaymentsPageObject(page);
+            var paymentsPageObject = new PaymentsPageObject(Page);
             var oldEverydayAccountBalance = await paymentsPageObject.GetAccountBalance(EverydayAccount);
             var expectedEverydayAccountBalance = BalanceCalculator.SubtractFromBalance(oldEverydayAccountBalance[0], TransferAmount);
 
             var oldBillsAccountBalance = await paymentsPageObject.GetAccountBalance(BillsAccount);
             var expectedBillsAccountBalance = BalanceCalculator.AddToBalance(oldBillsAccountBalance[0], TransferAmount);
 
-            await page.GotoAsync("https://www.demo.bnz.co.nz/client/payments");
+            await Page.GotoAsync("https://www.demo.bnz.co.nz/client/payments");
             await paymentsPageObject.Transfer(EverydayAccount, BillsAccount, TransferAmount);
 
             var newEverydayAccountBalance = await paymentsPageObject.GetAccountBalance(EverydayAccount);

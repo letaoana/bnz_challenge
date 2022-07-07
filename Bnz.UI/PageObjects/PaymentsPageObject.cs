@@ -6,7 +6,7 @@ namespace Bnz.UI.PageObjects
 {
     public class PaymentsPageObject
     {
-        public readonly IPage page;
+        public readonly IPage Page;
         private readonly string fromAccount = "//button[@data-monitoring-label='Transfer Form From Chooser']";
         private readonly string toAccount = "//button[@data-monitoring-label='Transfer Form To Chooser']";
         private readonly string accountSearch = "//input[@placeholder='Search']";
@@ -18,16 +18,16 @@ namespace Bnz.UI.PageObjects
 
         public PaymentsPageObject(IPage page)
         {
-            this.page = page;
+            this.Page = page;
         }
 
         public async Task<IReadOnlyList<string>> GetOldBalanceAmounts()
-        => await page.Locator(oldBalance).AllTextContentsAsync();
+        => await Page.Locator(oldBalance).AllTextContentsAsync();
 
         public async Task<IReadOnlyList<string>> GetAccountBalance(string account)
         {
             await ClickAccount(account);
-            var accountBalance = await page.Locator(newBalance).AllTextContentsAsync();
+            var accountBalance = await Page.Locator(newBalance).AllTextContentsAsync();
             await ClickCloseAccountDetailsButton();
             return accountBalance;
         }
@@ -41,29 +41,29 @@ namespace Bnz.UI.PageObjects
         }
 
         public async Task SetAmount(double transferAmount)
-        => await page.FillAsync(amount, transferAmount.ToString());
+        => await Page.FillAsync(amount, transferAmount.ToString());
 
         public async Task SelectToAccount(string account)
         {
-            await page.ClickAsync(toAccount);
-            await page.FillAsync(accountSearch, account);
-            await page.ClickAsync($"//p[normalize-space()='{account}']");
+            await Page.ClickAsync(toAccount);
+            await Page.FillAsync(accountSearch, account);
+            await Page.ClickAsync($"//p[normalize-space()='{account}']");
         }
 
         public async Task SelectFromAccount(string account)
         {
-            await page.ClickAsync(fromAccount);
-            await page.FillAsync(accountSearch, account);
-            await page.ClickAsync($"//p[normalize-space()='{account}']");
+            await Page.ClickAsync(fromAccount);
+            await Page.FillAsync(accountSearch, account);
+            await Page.ClickAsync($"//p[normalize-space()='{account}']");
         }
 
         public async Task ClickTransferButton()
-        => await page.ClickAsync(transferButton);
+        => await Page.ClickAsync(transferButton);
 
         public async Task ClickAccount(string account)
-        => await page.ClickAsync($"//h3[normalize-space()='{account}']");
+        => await Page.ClickAsync($"//h3[normalize-space()='{account}']");
 
         public async Task ClickCloseAccountDetailsButton()
-        => await page.ClickAsync(closeAccountDetails);
+        => await Page.ClickAsync(closeAccountDetails);
     }
 }
