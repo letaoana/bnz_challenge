@@ -22,18 +22,12 @@
     <PackageReference Include="Microsoft.Playwright" Version="1.23.0" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
+    <PackageReference Include="NunitXml.TestLogger" Version="3.0.117" />
     <PackageReference Include="Shouldly" Version="4.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Bnz.API\Bnz.API.csproj" />
     <ProjectReference Include="..\Bnz.UI\Bnz.UI.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="TechTalk.SpecFlow">
-      <HintPath>bin\Debug\netcoreapp3.1\TechTalk.SpecFlow.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>
