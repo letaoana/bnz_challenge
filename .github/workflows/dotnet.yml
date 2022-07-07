@@ -34,4 +34,4 @@ jobs:
     - name: Run API Tests        
       run: dotnet test Bnz.API.Tests --verbosity normal --logger "nunit;LogFileName=TestResults.xml"
     - name: Run UI Tests
-      run: xvfb-run npx playwright test PayeeTests.cs PaymentsTests.cs --headed
+      run: xvfb-run node PayeeTests.cs PaymentsTests.cs --headed
