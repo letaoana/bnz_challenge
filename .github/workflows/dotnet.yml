@@ -33,7 +33,5 @@ jobs:
       run: dotnet build --no-restore
     - name: Run API Tests        
       run: dotnet test Bnz.API.Tests --verbosity normal --logger "nunit;LogFileName=TestResults.xml"
-    - name: Build
-      run: dotnet build --no-restore
     - name: Run UI Tests
-      run: dotnet test ../Bnz/Bnz.UI.Tests.csproj --verbosity normal --logger "nunit;LogFileName=TestResults.xml"
+      run: dotnet test --verbosity normal --logger "nunit;LogFileName=TestResults.xml"
