@@ -18,8 +18,15 @@ jobs:
       with:
         dotnet-version: 3.1.x
     - uses: microsoft/playwright-github-action@v1
-    - name: Install dependencies and run tests
-      run: xvfb-run --auto-servernum npm test
+    - uses: actions/setup-node@v2
+      with:
+          node-version: '14.x'
+    - name: Install dependencies
+      run: | 
+          cd testing
+          npm ci
+          npx playwright install-deps
+          npx playwright install
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
