@@ -23,8 +23,6 @@ jobs:
           node-version: '14.x'
     - name: Install dependencies
       run: | 
-          cd testing
-          npm ci
           npx playwright install-deps
           npx playwright install
     - name: Restore dependencies
