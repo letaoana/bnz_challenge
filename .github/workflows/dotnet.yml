@@ -16,10 +16,22 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 3.1.x
+    - uses: microsoft/playwright-github-action@v1
+    - uses: actions/setup-node@v2
+      with:
+          node-version: '14.x'
     - name: Restore dependencies
       run: dotnet restore
+    - name: Install Playwright Test
+      run: 
+          npm install -D @playwright/test
+    - name: Install Playwright
+      run: | 
+          npx playwright install --with-deps     
     - name: Build
       run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --verbosity normal --logger "nunit;LogFileName=TestResults.xml"
+    - name: Run API Tests        
+      run: dotnet test Bnz.API.Tests --verbosity normal --logger "nunit;LogFileName=TestResults.xml"
+    - name: Run UI Tests
+      run: xvfb-run npx playwright test --project=Bnz.UI.Tests --headed
