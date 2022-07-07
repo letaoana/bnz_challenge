@@ -31,7 +31,5 @@ jobs:
           npx playwright install --with-deps     
     - name: Build
       run: dotnet build --no-restore
-    - name: Run API Tests        
-      run: dotnet test Bnz.API.Tests --verbosity normal --logger "nunit;LogFileName=TestResults.xml"
-    - name: Run UI Tests
+    - name: Run Tests
       run: dotnet test --verbosity normal --logger "nunit;LogFileName=TestResults.xml"
